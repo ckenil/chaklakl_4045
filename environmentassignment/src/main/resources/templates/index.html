@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Assignment 2: Higher-Lower Game</title>
+		<style>
+			html {
+				background-color: #66d7d1;
+				margin-left: 2%;
+			}
+			
+			h1 {
+				text-align: center;
+			}
+			
+			h3 {
+				font-size: 24px;
+			}
+			
+			p {
+				font-size: 24px;
+			}
+			
+			.button {
+				background-color: #fc7753;
+			    border: none;
+			    color: #000000;
+			    padding: 15px 32px;
+			    text-align: center;
+			    display: inline-block;
+			    font-size: 16px;
+			    margin: 5% 0%;
+			    cursor: pointer;
+			}
+			
+			.hidden  {
+				display: none;
+			}
+			
+			form {
+				margin-left: 2%;
+				font-size: 20px;
+			}
+		</style>
+	</head>
+	
+	<body>
+		<h1>Welcome to Higher-Lower Game!</h1>
+		
+		<p><b>Objective:</b> Select whether you think the initial number is higher or lower than the hidden number.</p>
+		
+		<div id="welcomeScreen">
+			<p>Click start to begin!</p>
+			<button id="startBtn" class="button">Start</button>
+		</div>
+		
+		<div id="gameScreen" class="hidden">
+			<h3 id="initialNumberHeader"></h3>
+			<form id="gameForm">
+				<input type="radio" name="guess" id="higher" value="higher">
+				<label for="higher">Higher</label><br>
+				
+				<input type="radio" name="guess" id="lower" value="lower">
+				<label for="lower">Lower</label><br>
+				
+				<input type="radio" name="guess" id="same" value="same">
+				<label for="same">Same</label><br>
+				
+				<input type="submit" value="Guess" class="button">
+				<button id="restartBtn" class="button" style="margin-left:2%;">Restart</button>
+			</form>
+		</div>
+		
+		<script>
+		const startBtn = document.getElementById("startBtn");
+		const restartBtn = document.getElementById("restartBtn");
+
+		const welcomeScreen = document.getElementById("welcomeScreen");
+		const gameScreen = document.getElementById("gameScreen");
+
+		const initialNumberHeader = document.getElementById("initialNumberHeader");
+
+		var initialNumber;
+		var hiddenNumber;
+
+		// Generates random number from 0 - 9
+		function generateRandomNumber() {
+			return randomNumber = Math.floor(Math.random() * 10);
+		}
+
+		function gameSetup() {
+			//Generates numbers that will be used for the game
+			initialNumber = generateRandomNumber();
+			hiddenNumber = generateRandomNumber();
+			
+			// For testing purposes
+			console.log("final number " + hiddenNumber);
+			
+			//Displays initial number
+			initialNumberHeader.innerHTML = "Initial Number: " + initialNumber;
+		}
+
+		/*
+		 * Event listener for the start button. Once clicked, the game screen appears and welcome screen disappears.
+		 * Also initializes the numbers that will be used for the game.
+		 */
+		startBtn.addEventListener("click", function(startBtnClickEvent) {
+			welcomeScreen.classList.add("hidden");
+			gameScreen.classList.remove("hidden");
+			
+			gameSetup();
+		})
+
+		restartBtn.addEventListener("click", function(restartBtnClickEvent) {
+			restartBtnClickEvent.preventDefault();
+			
+			gameSetup();
+		})
+
+		/*
+		 * Event listener for the gameForm. 
+		 * Game logic determined here.
+		 */
+		gameForm.addEventListener("submit", function(gameFormSubmitEvent) {
+			gameFormSubmitEvent.preventDefault();
+			
+			var didWin = false;
+			
+			// Checks whether the player won or not
+			if (document.getElementById("higher").checked) 
+			{
+				didWin = initialNumber > hiddenNumber;
+			}
+			else if (document.getElementById("lower").checked)
+			{
+				didWin = initialNumber < hiddenNumber;
+			}
+			else 
+			{
+				didWin = initialNumber === hiddenNumber; 
+			}
+			
+			/*
+			 * Alerts the player on their result.
+			 * If they won, the screen returns back to the menu.
+			 * If they guess incorrectly, player is given another chance to guess correctly.
+			 */
+			if (didWin)
+			{
+				alert("You won! The hidden number was " + hiddenNumber + "!");
+				welcomeScreen.classList.remove("hidden");
+				gameScreen.classList.add("hidden");
+			}
+			else
+			{
+				alert("Incorrect! Try again!")
+			}
+			
+		})
+		</script>
+	</body>
+</html>
